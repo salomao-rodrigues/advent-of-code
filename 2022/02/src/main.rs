@@ -8,25 +8,43 @@ fn read_input_file() -> String {
     fs::read_to_string(file_path).expect("Should have been able to read the file")
 }
 
-fn convert_xyz_to_abc(c: char) -> char {
-    char::from_u32(c as u32 - 23).unwrap()
+fn convert_xyz_to_abc(c: char) -> Option<char> {
+    let mut converted_char = c;
+    if c == ' ' {
+        return None;
+    } else if "XYZ".contains(c) {
+        converted_char = char::from_u32(c as u32 - 23).unwrap()
+    }
+
+    Some(converted_char)
+}
+
+fn calculate_round_score(round: &str) -> u32 {
+    let hand: Vec<char> = round.chars().filter_map(convert_xyz_to_abc).collect();
+    let hero: char = hand[1];
+    let mut score: u32 = hero as u32 - 64;
+    let opponent: char = hand[0];
+    if hero == opponent {
+        score += 3;
+    } else if hero == 'A' && opponent == 'C'
+        || hero == 'B' && opponent == 'A'
+        || hero == 'C' && opponent == 'B'
+    {
+        score += 6;
+    }
+
+    score
 }
 
 fn calculate_score(rounds: String) -> u32 {
-    rounds.split("\n").fold(0, |acc, r| {
-        if r.is_empty() {
+    rounds.split("\n").fold(0, |acc, round| {
+        if round.is_empty() {
             return acc;
         }
 
-        let hands: Vec<char> = r
-            .replace(" ", "")
-            .chars()
-            .to_owned()
-            .map(convert_xyz_to_abc)
-            .collect();
+        let score: u32 = calculate_round_score(round);
 
-        println!("ASCII value: {}", hands[1]);
-        acc + 1
+        acc + score
     })
 }
 
