@@ -34,7 +34,7 @@ fn map_xyz_to_abc(round: &str) -> Vec<char> {
  *   The losing direction is -1, so C - 1 = B.
  * Example 2: "C Z"
  *   Hero wants to beat C, therefore the direction is "1"
- *   C + 1 becomes D, but that's out of bounds, so we need to multiply by -3.
+ *   C + 1 becomes D, but that's out of bounds, so we need to multiply by -2.
  *   D + (1 * -3) = D - 3
  *   D - 3 = A, and A beats C (rock beats scissors)
  */
