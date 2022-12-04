@@ -21,16 +21,14 @@ fn convert_xyz_to_abc(c: char) -> Option<char> {
 
 fn calculate_round_score(round: &str) -> u32 {
     let hand: Vec<char> = round.chars().filter_map(convert_xyz_to_abc).collect();
-    let hero: char = hand[1];
-    let mut score: u32 = hero as u32 - 64;
-    let opponent: char = hand[0];
-    if hero == opponent {
-        score += 3;
-    } else if hero == 'A' && opponent == 'C'
-        || hero == 'B' && opponent == 'A'
-        || hero == 'C' && opponent == 'B'
-    {
+    let hero: u32 = hand[1] as u32;
+    let mut score: u32 = hero - 64;
+    let opponent: u32 = hand[0] as u32;
+
+    if hero - 1 == opponent || hero + 2 == opponent {
         score += 6;
+    } else if hero == opponent {
+        score += 3;
     }
 
     score
